@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "677204482473",
+    "project_id": "dofirst-63f27",
+    "storage_bucket": "dofirst-63f27.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:677204482473:android:661e5898b4df69a9be0cb8",
+        "android_client_info": {
+          "package_name": "com.example.dofirst"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCIoUQi7owCGCUIuQZOvEAr_J5f1SZrvGQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
