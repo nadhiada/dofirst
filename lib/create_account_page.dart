@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-  options: DefaultFirebaseOptions.currentPlatform,
-);
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -62,6 +64,33 @@ class _SignUpPageState extends State<SignUpPage> {
     setState(() => isLoading = false);
   }
 
+  /// GOOGLE SIGN IN
+  Future<void> signInWithGoogle() async {
+    try {
+      final GoogleSignInAccount? googleUser =
+          await GoogleSignIn().signIn();
+
+      if (googleUser == null) return;
+
+      final googleAuth = await googleUser.authentication;
+
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      await FirebaseAuth.instance.signInWithCredential(credential);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Login Google berhasil!")),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error: $e")),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -97,7 +126,8 @@ class _SignUpPageState extends State<SignUpPage> {
                 /// TITLE
                 const Text(
                   "Create your account",
-                  style: TextStyle(
+                   textAlign: TextAlign.center,
+                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.w700,
                   ),
@@ -107,7 +137,8 @@ class _SignUpPageState extends State<SignUpPage> {
 
                 const Text(
                   "Join DoFirst today and start mastering your productivity journey.",
-                  style: TextStyle(color: Colors.black54, height: 1.4),
+                   textAlign: TextAlign.center,
+                   style: TextStyle(color: Colors.black54, height: 1.4),
                 ),
 
                 const SizedBox(height: 30),
@@ -197,28 +228,34 @@ class _SignUpPageState extends State<SignUpPage> {
 
                         const SizedBox(height: 25),
 
-                        /// GOOGLE BUTTON
-                        Container(
-                          height: 52,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(30),
-                            border:
-                                Border.all(color: Colors.grey.shade300),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.asset(
-                                "assets/icons/google.jpg",
-                                height: 22,
-                              ),
-                              const SizedBox(width: 10),
-                              const Text(
-                                "Sign up with Google",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            ],
+                        /// GOOGLE BUTTON (FIXED 🔥)
+                        GestureDetector(
+                          onTap: signInWithGoogle,
+                          child: Container(
+                            height: 52,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30),
+                              border:
+                                  Border.all(color: Colors.grey.shade300),
+                              color: Colors.white,
+                            ),
+                            child: Row(
+                              mainAxisAlignment:
+                                  MainAxisAlignment.center,
+                              children: const [
+                                FaIcon(
+                                  FontAwesomeIcons.google,
+                                  color: Colors.red,
+                                  size: 20,
+                                ),
+                                SizedBox(width: 10),
+                                Text(
+                                  "Sign up with Google",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ],
